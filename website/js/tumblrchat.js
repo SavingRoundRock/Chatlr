@@ -612,11 +612,25 @@ $(function() {
                     user:    users[clientId],
                     message: 'Ignored as spam due to repetition, length, or frequency.'});
 
-            } else if (clientId in users && 'op' in users[clientId] && !users[clientId].op && message.search(/follow/i) != -1 && roomUrlGet() != 'follow-back') {
+            } else if (clientId in users && 'op' in users[clientId] && !users[clientId].op && message.search(/(follow me|follow you)/i) != -1 && roomUrlGet() != 'follow-back') {
                 // If a connection exists, send a roomchange event
                 socket.send({
                     type: 'roomchange',
                     room: 'follow-back'});
+                $('#text').val('');
+
+            } else if (clientId in users && 'op' in users[clientId] && !users[clientId].op && message.search(/(nigga|nigger)/i) != -1 && roomUrlGet() != 'racists-and-thugs') {
+                // If a connection exists, send a roomchange event
+                socket.send({
+                    type: 'roomchange',
+                    room: 'racists-and-thugs'});
+                $('#text').val('');
+
+            } else if (clientId in users && 'op' in users[clientId] && !users[clientId].op && message.search(/(bitch|dick|vagina|pussy|fuck|penis)/i) != -1 && roomUrlGet() != 'dirty-mouth') {
+                // If a connection exists, send a roomchange event
+                socket.send({
+                    type: 'roomchange',
+                    room: 'dirty-mouth'});
                 $('#text').val('');
 
             } else {
@@ -896,8 +910,11 @@ $(function() {
     $('#button-follow').button({text: false, icons: {primary: 'ui-icon-plus'}});
     
     $(window).resize(function() {
+        var chatOffset = $('#advertisement').is(':visible') ? 126 : 0;
+
         $('#text').outerWidth($(window).width() - 12);
-        $('#chatbox').outerHeight($(window).height() - 78);
+        $('#chatbox').outerWidth($('#section-top-right').width() - chatOffset);
+        $('#chatbox, #advertisement').outerHeight($(window).height() - 78);
         $('#usersbox').outerHeight((($(window).height() - 66)  * 2 / 3) - 12);
         $('#roomsbox').outerHeight((($(window).height() - 66) / 3));
     }).resize();
